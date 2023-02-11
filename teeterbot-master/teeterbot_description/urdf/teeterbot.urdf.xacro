@@ -25,13 +25,6 @@
   <xacro:property name="body_length" value="$(arg body_length)" />
 
   <gazebo>
-    <plugin name="hector_gazebo_imu" filename="libhector_gazebo_ros_imu.so">
-      <bodyName>body_com</bodyName>
-      <topicName>imu</topicName>
-      <gaussianNoise>0.0</gaussianNoise>
-      <xyzOffset>0 0 0</xyzOffset>
-      <rpyOffset>0 0 0</rpyOffset>
-    </plugin>
     <plugin name="teeterbot_interface" filename="libteeterbot_gazebo_plugin.so">
       <pubGroundTruth>$(arg pub_ground_truth)</pubGroundTruth>
       <autoResetOrientation>$(arg auto_reset_orientation)</autoResetOrientation>
@@ -141,4 +134,24 @@
   <material name="orange">
     <color rgba="0.64 0.313939 0.095351 1.0"/>
   </material>
+  <gazebo reference="body_com">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>body_com</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
 </robot>
