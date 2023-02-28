@@ -25,7 +25,7 @@
   <!-- Control mode (set only one) -->
   <arg name="voltage_mode" default="false" />
   <arg name="torque_mode" default="false" />
-  <arg name="speed_mode" default="false" />
+  <arg name="speed_mode" default="true" />
 
   <group ns="$(arg robot_name)" >
     <!-- Translate launch arg true/false to integer 1/0 for SDF -->

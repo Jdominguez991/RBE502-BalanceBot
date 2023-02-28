@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <launch>
-
+  <arg name="control" default="true" />
+  <arg name="use_rqt" default="false" />
   <!-- Start up Gazebo -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch" />
 
@@ -24,16 +25,23 @@
 
     <!-- Simulation behavior settings -->
     <arg name="pub_ground_truth" value="false" />
-    <arg name="auto_reset_orientation" value="true" />
+    <arg name="auto_reset_orientation" value="false" />
     <arg name="auto_reset_delay" value="2.0" />
 
     <!-- Control mode (set only one) -->
     <arg name="voltage_mode" value="false" />
-    <arg name="torque_mode" value="true" />
-    <arg name="speed_mode" value="false" />
+    <arg name="torque_mode" value="false" />
+    <arg name="speed_mode" value="true" />
   </include>
   
-  <node name = "rqt_plot" pkg ="rqt_plot" type ="rqt_plot" args ="/yaw/data" />
-  <node name = "rqt_pub" pkg ="rqt_ez_publisher" type ="rqt_ez_publisher" args ="--slider-file $(find teeterbot_gazebo)/rqt_ez_pub_setting/setting.yaml" />
+
+  <group if="$(eval use_rqt)">
+     <include file="$(find teeterbot_gazebo)/launch/rqt.launch" />
+  </group>
+
+  <group if="$(eval control)">
+     <include file="$(find teeterbot_gazebo)/launch/control.launch" />
+  </group>
+  
 
 </launch>

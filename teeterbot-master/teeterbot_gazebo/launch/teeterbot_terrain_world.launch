@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <launch>
-
+  <arg name="control" default="true" />
+  <arg name="use_rqt" default="false" />
   <!-- World File -->
   <arg name="world_file" default="$(find teeterbot_gazebo)/world/terrain.world"/>
 
@@ -37,5 +38,13 @@
     <arg name="torque_mode" value="false" />
     <arg name="speed_mode" value="true" />
   </include>
+
+  <group if="$(eval use_rqt)">
+     <include file="$(find teeterbot_gazebo)/launch/rqt.launch" />
+  </group>
+
+  <group if="$(eval control)">
+     <include file="$(find teeterbot_gazebo)/launch/control.launch" />
+  </group>
 
 </launch>
