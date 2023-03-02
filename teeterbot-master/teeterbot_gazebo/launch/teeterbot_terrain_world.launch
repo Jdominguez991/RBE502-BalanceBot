@@ -38,6 +38,9 @@
     <arg name="torque_mode" value="false" />
     <arg name="speed_mode" value="true" />
   </include>
+  
+     <!-- Node for QuatToEuler Utility-->
+   <node pkg="utilities" name="gazebo_rpy" type="QuatToEuler" output="screen"/>
 
   <group if="$(eval use_rqt)">
      <include file="$(find teeterbot_gazebo)/launch/rqt.launch" />
