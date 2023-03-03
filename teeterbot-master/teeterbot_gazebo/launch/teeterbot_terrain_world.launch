@@ -28,6 +28,10 @@
     <arg name="wheel_radius" value="0.2" />
     <arg name="training_wheels" value="false" />
 
+    <!-- weighted block settings mass in kg-->
+    <arg name="weighted_block_mass" value="20" />
+    <arg name="weighted_block_height" value="0.25" />
+
     <!-- Simulation behavior settings -->
     <arg name="pub_ground_truth" value="false" />
     <arg name="auto_reset_orientation" value="false" />

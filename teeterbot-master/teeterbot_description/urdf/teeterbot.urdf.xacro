@@ -14,6 +14,9 @@
   <xacro:arg name="body_length" default="0.8" />
   <xacro:arg name="training_wheels" default="true" />
 
+  <xacro:arg name="weighted_block_mass" default="2" />
+  <xacro:arg name="weighted_block_height" default="0.25" />
+
   <xacro:property name="wheel_mass" value="$(arg wheel_mass)" />
   <xacro:property name="wheel_radius" value="$(arg wheel_radius)" />
   <xacro:property name="wheel_thickness" value="0.1" />
@@ -23,6 +26,9 @@
   <xacro:property name="body_width" value="$(arg body_width)" />
   <xacro:property name="body_depth" value="$(arg body_depth)" />
   <xacro:property name="body_length" value="$(arg body_length)" />
+
+  <xacro:property name="weight_body_height" value="$(arg weighted_block_height)" />
+  <xacro:property name="mass_weight" value="$(arg weighted_block_mass)" />
 
   <gazebo>
     <plugin name="teeterbot_interface" filename="libteeterbot_gazebo_plugin.so">
@@ -125,6 +131,38 @@
     <origin xyz="0 0 ${body_length/2}" rpy="0 0 0"/>
     <parent link="base_link"/>
     <child link="body_com"/>
+  </joint>
+
+   <link name="top_weight">
+    <collision>
+      <origin xyz="0 0 ${body_length}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${body_depth} ${body_width} ${weight_body_height}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 ${body_length}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${body_depth} ${body_width} ${weight_body_height}"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${mass_weight}"/>
+      <inertia
+        ixx="${(mass_weight*(weight_body_height*weight_body_height + body_depth*body_depth))/12}" ixy="0.0" ixz="0.0"
+        iyx="0.0" iyy="${(mass_weight*(body_width*body_width + body_depth*body_depth))/12}" iyz="0.0"
+        izx="0.0" izy="0.0" izz="${(mass_weight*(body_width*body_width + weight_body_height*weight_body_height))/12}"/>
+    </inertial>
+  </link>
+
+   <joint name="weighted_block_joint" type="fixed">
+    <origin xyz="0 0 -.275" rpy="0 0 0"/>
+    <parent link="body_com"/>
+    <child link="top_weight"/>
   </joint>
 
   <material name="grey">
