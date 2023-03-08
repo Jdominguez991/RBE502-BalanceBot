@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+   <!-- Node for PID Controller -->
+   <node pkg="controller" name="controller" type="controller" output="screen"/>
+   
+</launch>
+   
