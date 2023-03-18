@@ -4,5 +4,8 @@
    <!-- Node for PID Controller -->
    <node pkg="controller" name="controller" type="controller" output="screen"/>
    
+   <!-- Teleop Keyboard -->
+   <node pkg="teleop_twist_keyboard" name="teleop_twist_keyboard" type="teleop_twist_keyboard.py"  output="screen"/>
+   
 </launch>
    
