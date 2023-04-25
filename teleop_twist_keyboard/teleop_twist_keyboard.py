@@ -193,14 +193,14 @@ def restoreTerminalSettings(old_settings):
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
 def vels(speed, turn):
-    return "currently:\tspeed %s m\tturn %s rad/s" % (speed,turn)
+    return "currently:\tspeed %s degrees\tturn %s rad/s" % (speed,turn)
 
 if __name__=="__main__":
     settings = saveTerminalSettings()
 
     rospy.init_node('teleop_twist_keyboard')
 
-    speed = rospy.get_param("~speed", 0.5)
+    speed = rospy.get_param("~speed", 1)
     turn = rospy.get_param("~turn", 1.0)
     speed_limit = rospy.get_param("~speed_limit", 1000)
     turn_limit = rospy.get_param("~turn_limit", 1000)
