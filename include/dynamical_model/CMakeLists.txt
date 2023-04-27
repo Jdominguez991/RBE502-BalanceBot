@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(controller)
+project(dynamical_model)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -11,7 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  dynamical_model
   #geometry_msgs
   #gazebo_msgs
   #tf
@@ -107,10 +106,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-   INCLUDE_DIRS ../include
-#  LIBRARIES wheel_driver
-#  CATKIN_DEPENDS roscpp rospy std_msgs
-   DEPENDS dynamical_model
+  #INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}
+  CATKIN_DEPENDS roscpp rospy std_msgs
+  DEPENDS cmath string vector ostream
 )
 
 ###########
@@ -120,10 +119,9 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include
+   include
   ${catkin_INCLUDE_DIRS}
   ${GAZEBO_INCLUDE_DIRS}
-  ${dynamical_model_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -185,7 +183,7 @@ include_directories(
 # )
 
 ## Mark cpp header files for installation
-install(DIRECTORY include/dynamical_model/
+install(DIRECTORY include/${PROJECT_NAME}/
    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
    FILES_MATCHING PATTERN "*.h"
    PATTERN ".svn" EXCLUDE
@@ -214,5 +212,6 @@ install(DIRECTORY include/dynamical_model/
 #add_executable(controller controller.cpp)
 #target_link_libraries(controller ${catkin_LIBRARIES})
 #add_executable(controller controllerwithff.cpp)
-add_executable(controller controllerCompTorq.cpp)
-target_link_libraries(controller ${catkin_LIBRARIES})
+add_library(${PROJECT_NAME} Dynamical_Model.cpp)
+#add_executable(${PROJECT_NAME} Dynamical_Model.cpp)
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
