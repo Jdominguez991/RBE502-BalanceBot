@@ -43,8 +43,11 @@
     <arg name="speed_mode" value="true" />
   </include>
   
-     <!-- Node for QuatToEuler Utility-->
-   <node pkg="utilities" name="gazebo_rpy" type="QuatToEuler" output="screen"/>
+  <!-- Node for QuatToEuler Utility-->
+  <node pkg="utilities" name="gazebo_rpy" type="QuatToEuler" output="screen"/>
+   
+  <!-- Node for rosbag -->
+  <node pkg="rosbag" type="record" args="record -o $(find bags)/bag_files/ /teeterbot/rpy" name="rosbag_recorder" output="screen"/>
 
   <group if="$(eval use_rqt)">
      <include file="$(find teeterbot_gazebo)/launch/rqt.launch" />
