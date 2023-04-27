@@ -156,6 +156,18 @@ public:
         return outstr;
     }
 
+    // function to set diagonal elements:
+    void diag(const double val)
+    {
+        if (R==C)
+        {
+            for (int i=0; i < R; ++i)
+            {
+                _data[i][i] = val;
+            }
+        }
+    }
+
 };
 
 #endif
