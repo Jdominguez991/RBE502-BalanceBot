@@ -6,13 +6,14 @@
 #include <geometry_msgs/Twist.h>    // Header file for teleop topic
 #include <boost/algorithm/clamp.hpp>
 #include <ros/console.h>
-#include "../include/dynamical_model/Matrix.h"                 // For defining matrices and vectors
-#include "../include/dynamical_model/Dynamical_Model.h"  
+#include <Dynamical_Model.h>
+#include "Matrix.h"
 
 int int_var;
 double double_var;
 std::string string_var;
-float KdVar = 7, KpVar = 1;
+int KpVar = -4, KiVar = -5, KdVar = -10;     // Gain parameters
+float FF=15;
 class Controller {
 private:
     // ----- ROS VARIABLES ----- //
@@ -34,8 +35,8 @@ private:
     Dynamical_Model tbDM;
 
     // ----- KEYBOARD VARIABLES ----- //
-    std_msgs::Float64 leftTorque;
-    std_msgs::Float64 rightTorque;
+    std_msgs::Float64 leftSpeed;
+    std_msgs::Float64 rightSpeed;
 
     // ----- FALLEN OVER VARIABLE ----- //
     bool grounded;
@@ -57,8 +58,8 @@ public:
         fallen = n->subscribe("/teeterbot/fallen_over",100,&Controller::fallenSetter,this);
         leftSub = n->subscribe("/teeterbot/left_wheel_speed",100,&Controller::currentSpeedSetterLW,this);
         rightSub = n->subscribe("/teeterbot/right_wheel_speed",100,&Controller::currentSpeedSetterRW,this);
-        leftPub = n->advertise<std_msgs::Float64>("/teeterbot/left_torque_cmd",100);
-        rightPub = n->advertise<std_msgs::Float64>("/teeterbot/right_torque_cmd",100);
+        leftPub = n->advertise<std_msgs::Float64>("/teeterbot/left_speed_cmd",100);
+        rightPub = n->advertise<std_msgs::Float64>("/teeterbot/right_speed_cmd",100);
         // Initialize timer:
         //resetTimer();
         Kp.diag(KpVar);
@@ -72,8 +73,8 @@ public:
         ros::param::get("/Kp", KpVar);
         ros::param::get("/Kd", KdVar);
 
-        Kp.diag(KpVar);
-        Kd.diag(KdVar);
+        Kp.diag(10.0);
+        Kd.diag(10.0);
         // Establish current position:
         //timeCheck();
         q(0,0) += dq(0,0) * delta_t;
@@ -104,12 +105,12 @@ public:
         tbDM.compute_G(q_des);
         tbDM.compute_Tau(dq_des, q_des);
         desiredTou = tbDM.get_Tau();
-        tau_cmd=first2Values+desiredTou;
+        tau_cmd=first2Values+desiredTou
         // Publish commands:
-        rightTorque.data = float(tau_cmd.getElem(0,0)); 
-        leftTorque.data = float(tau_cmd.getElem(1,0)); 
-        rightPub.publish(rightTorque);
-        leftPub.publish(leftTorque);
+        rightSpeed.data = float(tau_cmd.getElem(0,0)); 
+        leftSpeed.data = float(tau_cmd.getElem(1,0)); 
+        rightPub.publish(rightSpeed);
+        leftPub.publish(leftSpeed);
 
         // Reset Timer:
         //resetTimer();
@@ -160,10 +161,11 @@ public:
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "controllerPDFF");
-    ros::NodeHandle n;
     ros::param::set("/Kp", KpVar);
     ros::param::set("/Kd", KdVar);
+    ros::init(argc, argv, "controllerCompTorq");
+    ROS_INFO("Computed Torque Controller Initialized");
+    ros::NodeHandle n;
     Controller con = Controller(&n);
     ros::spin();
 }

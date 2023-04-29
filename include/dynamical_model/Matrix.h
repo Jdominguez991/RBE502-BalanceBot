@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <ostream>
+#include <cmath>
 
 template<int R, int C>
 class Matrix
@@ -12,13 +13,22 @@ private:
     //size_t _rowCount;
     //size_t _columnCount;
     double  _data[R][C];
+    double roundToZero(double in) const // Extra protection against nans
+    {
+        if (std::abs(in) < (1/(pow(10,9))))
+        {
+            //std::cout << "Value in matrix operation rounded to zero!" << std::endl;
+            return double(0.0);
+        }
+        return in;
+    }
 
 public:
     // constructor:
     Matrix()
     {
         // always initialize Matrix to zero
-        (*this) *= 0.0;   // should only work if "operator*" is defined properly below
+        (*this) *= 0.0;   // should only work if "operator*=" is defined properly below
     }
 
     // (volatile) element access:
@@ -35,7 +45,7 @@ public:
         {
             for (int j = 0; j < C; j++)
             {
-                newMat._data[i][j] = _data[i][j] + scale;
+                newMat._data[i][j] = roundToZero(_data[i][j] + scale);
             }
         }
         return newMat;
@@ -48,7 +58,7 @@ public:
         {
             for (int j = 0; j < C; j++)
             {
-                _data[i][j] += scale;
+                _data[i][j] = roundToZero(_data[i][j] + scale);
             }
         }
     }
@@ -61,7 +71,7 @@ public:
         {
             for (int j = 0; j < C; j++)
             {
-                newMat._data[i][j] = _data[i][j] + otherMat._data[i][j];
+                newMat._data[i][j] = roundToZero(_data[i][j] + otherMat._data[i][j]);
             }
         }
         return newMat;
@@ -74,7 +84,7 @@ public:
         {
             for (int j = 0; j < C; j++)
             {
-                _data[i][j] += otherMat._data[i][j];
+                _data[i][j] = roundToZero(_data[i][j] + otherMat._data[i][j]);
             }
         } 
     }
@@ -87,7 +97,7 @@ public:
         {
             for (int j = 0; j < C; j++)
             {
-                newMat._data[i][j] = _data[i][j] * scale;
+                newMat._data[i][j] = roundToZero(_data[i][j] * scale);
             }
         }
         return newMat;
@@ -106,7 +116,7 @@ public:
         {
             for (int j = 0; j < C; j++)
             {
-                _data[i][j] *= scale;
+                _data[i][j] = roundToZero(getElem(i,j)*scale);
             }
         }
     }
@@ -122,7 +132,7 @@ public:
             {
                 for (int k = 0; k < C; k++)
                 {
-                    newMat(i,j) += ( _data[i][k] * otherMat.getElem(k,j) ); // need to use getElem here b/c we're contracted to keep otherMat const
+                    newMat.setElem(i, j, roundToZero(newMat.getElem(i,j) + roundToZero(getElem(i,k) * otherMat.getElem(k,j)))); // need to use getElem here b/c we're contracted to keep otherMat const
                 }
             }
         }
@@ -139,7 +149,7 @@ public:
     double getElem(int m, int n) const { return _data[m][n]; }
 
     // (secure) element setting:
-    void setelem(int m, int n, const double val) { _data[m][n] = val; }
+    void setElem(int m, int n, const double val) { _data[m][n] = val; }
 
     // function to create string of matrix for printing:
     std::string toString()

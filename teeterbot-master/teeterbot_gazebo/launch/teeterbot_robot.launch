@@ -28,8 +28,8 @@
 
   <!-- Control mode (set only one) -->
   <arg name="voltage_mode" default="false" />
-  <arg name="torque_mode" default="false" />
-  <arg name="speed_mode" default="true" />
+  <arg name="torque_mode" default="true" />
+  <arg name="speed_mode" default="false" />
 
   <group ns="$(arg robot_name)" >
     <!-- Translate launch arg true/false to integer 1/0 for SDF -->
@@ -52,11 +52,12 @@
 
     <!-- Publish TF frames within URDF model -->
     <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-      <param name="publish_frequency" value="50.0" />
+      <param name="publish_frequency" value="60.0" />
     </node>
   </group>
 
   <!-- Default controller parameters -->
+  
   <param name="/gazebo/left_speed_control/ramp_limit" value="20.0" />
   <param name="/gazebo/left_speed_control/kp" value="3.0" />
   <param name="/gazebo/left_speed_control/ki" value="2.0" />
@@ -74,5 +75,6 @@
   <param name="/gazebo/right_torque_control/kp" value="10.0" />
   <param name="/gazebo/right_torque_control/ki" value="2.0" />
   <param name="/gazebo/right_torque_control/kd" value="0.0" />
+  
 
 </launch>
