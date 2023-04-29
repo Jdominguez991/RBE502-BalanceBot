@@ -1,16 +1,11 @@
 #include <ros/ros.h>            
 #include <std_msgs/Float64.h>       // Header file for teeterbot topics
-#include <std_msgs/Bool.h> 
-#include <std_msgs/Int16.h>          // Header file for fallen over topic
+#include <std_msgs/Bool.h>          // Header file for fallen over topic
 #include <geometry_msgs/Vector3.h>  // Header file for IMU topic
 #include <geometry_msgs/Twist.h>    // Header file for teleop topic
 #include <boost/algorithm/clamp.hpp>
-#include <ros/console.h>
-int int_var;
-double double_var;
-std::string string_var;
-int Kp = -4, Ki = -5, Kd = -10;     // Gain parameters
-float FF=15;
+
+int Kp = -20, Kd = -1;
 class Controller {
     private:
         // ---- ROS VARIABLES ---- //
@@ -22,8 +17,7 @@ class Controller {
 
 
         // ---- PID VARIABLES ---- //
-        int Kp = -10, Ki = -8, Kd = -1;     // Gain parameters
-        float FF=20, angleSpeed=0;
+        int Kp = -20, Ki = -5, Kd = -1;     // Gain parameters
         float currentPitch, desiredPitch=0, error, errorSum = 0, errorDiff, errorPrev = 0;    
 
         // ---- KEYBOARD VARIABLES ---- //
@@ -36,7 +30,6 @@ class Controller {
         // ---- FALLEN OVER VARIABLE ---- //
         bool currentState;
          
-        
 
     public:
         Controller(ros::NodeHandle *n){        
@@ -49,13 +42,12 @@ class Controller {
         }
 
         void pid(const geometry_msgs::Vector3::ConstPtr IMUdata){
-            // Obtain current angle via IMU
-            currentPitch = IMUdata->y; //x is roll, y is pitch, z is yaw
 
             ros::param::get("/Kp", Kp);
-            ros::param::get("/Ki", Ki);
             ros::param::get("/Kd", Kd);
-            ros::param::get("/FF", FF);
+            // Obtain current angle via IMU
+            currentPitch = IMUdata->y; //x is roll, y is pitch, z is yaw
+            
             // Compute error
             error = desiredPitch - currentPitch;
 
@@ -66,13 +58,8 @@ class Controller {
             errorDiff = error - errorPrev;
             errorPrev = error;
 
-            //compute Feedforward
-            angleSpeed=sinf(currentPitch);
-            //ROS_DEBUG(angleSpeed);
-            //std::cout << angleSpeed; 
-
             // Compute target speed
-            targetSpeed = Kp*error + Ki*errorSum + Kd*errorDiff+angleSpeed*FF;
+            targetSpeed = Kp*error + Kd*errorDiff;
 
             //ROS_INFO_STREAM("Error is " << error << "ErrorSum is " << errorSum << " | ErrorDiff is " << errorDiff << " | desiredSpeed is " << desiredSpeed << " | targetSpeed is " << targetSpeed);
 
@@ -136,16 +123,13 @@ class Controller {
         void fallenSetter(const std_msgs::Bool& state){
             currentState = state.data;
         }
-
 };
 
 int main(int argc, char** argv){
-    ros::init(argc,argv, "controller");
+    ros::init(argc,argv, "controller_PD");
     ros::NodeHandle n;
     ros::param::set("/Kp", Kp);
-    ros::param::set("/Ki", Ki);
     ros::param::set("/Kd", Kd);
-    ros::param::set("/FF", FF);
     Controller con = Controller(&n);
     ros::spin();
 }

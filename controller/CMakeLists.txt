@@ -214,6 +214,7 @@ install(DIRECTORY include/dynamical_model/
 #add_executable(controller controller.cpp)
 #target_link_libraries(controller ${catkin_LIBRARIES})
 #add_executable(controller controllerwithff.cpp)
-add_executable(controller controllerwithffStateSpace.cpp)
+add_executable(controller controller_pd.cpp)
+#add_executable(controller controllerwithffStateSpace.cpp)
 #add_executable(controller controllerCompTorq.cpp)
 target_link_libraries(controller ${catkin_LIBRARIES})

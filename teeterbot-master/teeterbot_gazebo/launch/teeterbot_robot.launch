@@ -42,7 +42,7 @@
     <arg     if="$(arg torque_mode)" name="torque_arg" value="torque_mode:=1" />
     <arg unless="$(arg torque_mode)" name="torque_arg" value="torque_mode:=0" />
     <arg     if="$(arg speed_mode)" name="speed_arg" value="speed_mode:=1" />
-    <arg unless="$(arg speed_mode)" name="speed_arg" value="speed_mode:=0" />
+    <arg unless="$(arg speed_mode)" name="speed_arg" value="speed_mode:=0" /> 
 
     <!-- Parse URDF file with specified arguments -->
     <param name="robot_description" command="$(find xacro)/xacro '$(find teeterbot_description)/urdf/teeterbot.urdf.xacro' robot_name:=$(arg robot_name) training_wheels:=$(arg training_wheels) body_depth:=$(arg body_depth) body_width:=$(arg body_width) body_length:=$(arg body_length) body_mass:=$(arg body_mass) wheel_mass:=$(arg wheel_mass) wheel_radius:=$(arg wheel_radius) $(arg ground_truth_arg) $(arg auto_reset_arg) auto_reset_delay:=$(arg auto_reset_delay) $(arg voltage_arg) $(arg torque_arg) $(arg speed_arg) --inorder" />
