@@ -39,4 +39,4 @@ Open keyboard controller:
 ```
 roslaunch teeterbot_gazebo control.launch
 ```
-
+If launcing the file with a 4 or 5 and the model does not spawn correctly launch the model with the default values at least once and then select the 4 or 5 and it should fix the error
