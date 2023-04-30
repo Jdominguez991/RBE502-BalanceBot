@@ -5,7 +5,7 @@
 #include <geometry_msgs/Twist.h>    // Header file for teleop topic
 #include <boost/algorithm/clamp.hpp>
 
-int Kp = -20, Kd = -1;
+int Kp = -128, Kd = -22;
 class Controller {
     private:
         // ---- ROS VARIABLES ---- //
@@ -17,12 +17,12 @@ class Controller {
 
 
         // ---- PID VARIABLES ---- //
-        int Kp = -122, Kd = -10;     // Gain parameters
+        int Kp = -128, Kd = -22;    // Gain parameters
         float currentPitch, desiredPitch=0, error, errorSum = 0, errorDiff, errorPrev = 0;    
 
         // ---- KEYBOARD VARIABLES ---- //
         float targetSpeed;
-        float desiredSpeed;
+        float desiredSpeed=0;
         float desiredRotation;
         std_msgs::Float64 leftSpeed;
         std_msgs::Float64 rightSpeed;
