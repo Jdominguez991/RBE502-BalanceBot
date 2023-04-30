@@ -17,7 +17,7 @@ class Controller {
 
 
         // ---- PID VARIABLES ---- //
-        int Kp = -20, Ki = -5, Kd = -1;     // Gain parameters
+        int Kp = -122, Kd = -10;     // Gain parameters
         float currentPitch, desiredPitch=0, error, errorSum = 0, errorDiff, errorPrev = 0;    
 
         // ---- KEYBOARD VARIABLES ---- //
