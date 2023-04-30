@@ -1,7 +1,16 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="control" default="false" />
-  <arg name="use_rqt" default="true" />
+  <arg name="controller" default="1" /><!-- 0=no controller || 1=PID || 2=PD || 3=PDFF || 4=PDFF statespace || 5 = computed torque-->
+  <arg name="use_rqt" default="false" />
+  <arg name="record_bag" default="true" />
+  <arg name="numSpeedControllers" default="3" />
+ 
+  <arg name="use_torque" default="false" unless="$(eval controller>numSpeedControllers)"/>
+  <arg name="use_torque" value="true" if="$(eval controller>numSpeedControllers)" />
+
+  <arg name="use_speed" default="true" unless="$(eval controller>numSpeedControllers)"/>
+  <arg name="use_speed" value="false" if="$(eval controller>numSpeedControllers)" />
+
   <!-- World File -->
   <arg name="world_file" default="$(find teeterbot_gazebo)/world/terrain.world"/>
 
@@ -39,22 +48,26 @@
 
     <!-- Control mode (set only one) -->
     <arg name="voltage_mode" value="false" />
-    <arg name="torque_mode" value="false" />
-    <arg name="speed_mode" value="true" />
+    <arg name="torque_mode" value="$(arg use_torque)" />
+    <arg name="speed_mode" value="$(arg use_speed)" />
   </include>
-  
-  <!-- Node for QuatToEuler Utility-->
+
+   <!-- Node for QuatToEuler Utility-->
   <node pkg="utilities" name="gazebo_rpy" type="QuatToEuler" output="screen"/>
    
   <!-- Node for rosbag -->
-  <node pkg="rosbag" type="record" args="record -o $(find bags)/bag_files/ /teeterbot/rpy" name="rosbag_recorder" output="screen"/>
-
-  <group if="$(eval use_rqt)">
+  <group if="$(eval record_bag)">
+     <node pkg="rosbag" type="record" args="record -o $(find bags)/bag_files/ /teeterbot/rpy" name="rosbag_recorder" output="screen"/>
+  </group>
+  <!-- launch rqt viewer nodes -->
+  <group if="$(arg use_rqt)">
      <include file="$(find teeterbot_gazebo)/launch/rqt.launch" />
   </group>
 
-  <group if="$(eval control)">
-     <include file="$(find teeterbot_gazebo)/launch/control.launch" />
+  <!-- what controller to launch -->
+  <group if="$(eval controller > 0)">
+    <include file="$(find teeterbot_gazebo)/launch/controller.launch" >
+      <arg name="controller_type" value="$(arg controller)" />
+    </include>
   </group>
-
 </launch>

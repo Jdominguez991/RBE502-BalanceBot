@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="controller_type" default="1" /><!-- 0=no controller 1=PID 2=PD 3=PDFF 4=PDFF statespace 5= computed torque-->
+
+  <!-- PID controller -->
+  <group if="$(eval controller_type==1)">
+    <node pkg="controller" type="controller" name="PID_controller" output="screen"/>
+  </group>
+
+  <!-- PD controller -->
+  <group if="$(eval controller_type==2)">
+    <node pkg="controller" type="controllerpd" name="PD_controller" output="screen"/>
+  </group>
+
+  <!-- PD controller with feed forward-->
+  <group if="$(eval controller_type==3)">
+    <node pkg="controller" type="controllerwithff" name="PD_FF_controller" output="screen"/>
+  </group>
+
+  <!-- PD controller with feed forward utilizing dynamic equations in statespace-->
+  <group if="$(eval controller_type==4)">
+    <node pkg="controller" type="controllerffStateSpace" name="FF_state_space_controller" output="screen"/>
+  </group>
+
+  <!-- compute torque controller utilizing dynamic equations in statespace-->
+  <group if="$(eval controller_type==5)">
+    <node pkg="controller" type="controllerCompTorq" name="comp_torq_controller" output="screen"/>
+  </group>
+
+</launch>

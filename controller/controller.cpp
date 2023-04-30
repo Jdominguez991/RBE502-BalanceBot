@@ -123,7 +123,7 @@ class Controller {
 };
 
 int main(int argc, char** argv){
-    ros::init(argc,argv, "controller");
+    ros::init(argc,argv, "controller_PID");
     ros::NodeHandle n;
     Controller con = Controller(&n);
     ros::spin();

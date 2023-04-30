@@ -140,7 +140,7 @@ class Controller {
 };
 
 int main(int argc, char** argv){
-    ros::init(argc,argv, "controller");
+    ros::init(argc,argv, "controller_with_FF");
     ros::NodeHandle n;
     ros::param::set("/Kp", Kp);
     ros::param::set("/Ki", Ki);
