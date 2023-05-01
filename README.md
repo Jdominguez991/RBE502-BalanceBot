@@ -34,7 +34,7 @@ catkin_init_workspace
 
 2. Clone this repo to `catkin_ws/src`
 ```
-git clone https://github.com/Jdominguez991/RBE502-BalanceBot.git .
+git clone https://github.com/Jdominguez991/RBE502-BalanceBot.git
 ```
 
 3. Build and source the project
