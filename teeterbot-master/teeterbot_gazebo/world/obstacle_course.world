@@ -206,10 +206,10 @@
       <pose>-0.057132 0.075629 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>798 648000000</sim_time>
-      <real_time>272 119576549</real_time>
-      <wall_time>1682581998 958425569</wall_time>
-      <iterations>270020</iterations>
+      <sim_time>837 256000000</sim_time>
+      <real_time>38 640654552</real_time>
+      <wall_time>1682930066 180591781</wall_time>
+      <iterations>38608</iterations>
       <model name='Construction Cone'>
         <pose>-0.997217 6.92151 -0 0 -1e-06 0</pose>
         <scale>1 1 1</scale>
@@ -241,23 +241,13 @@
         </link>
       </model>
       <model name='Construction Cone_2_clone_1'>
-        <pose>0.735012 19.6924 -0 1e-06 -0 0</pose>
+        <pose>0.735012 19.6924 -0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>0.735012 19.6924 -0 1e-06 -0 0</pose>
+          <pose>0.735012 19.6924 -0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-0 -0 -0.119869 1.68816 -0.209242 0</acceleration>
-          <wrench>-0 -0 -0.119869 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='Construction Cone_2_clone_2'>
-        <pose>0.120059 28.8425 1.26304 0.34167 -0.015093 -0.006947</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>0.120059 28.8425 1.26304 0.34167 -0.015093 -0.006947</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-0 -0 0 0 -0 0</acceleration>
-          <wrench>-0 -0 0 0 -0 0</wrench>
+          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='Stop Sign'>
@@ -300,16 +290,6 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='Stop Sign_clone_clone'>
-        <pose>0.942947 27.899 0.817063 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>0.942947 27.899 0.817063 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
       <model name='ground_plane'>
         <pose>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -342,7 +322,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>2.25007 -1.42846 30.3581 0 0.965803 1.54556</pose>
+        <pose>-7.45948 -8.54292 6.77985 0 0.341801 1.22556</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
@@ -586,55 +566,6 @@
       </link>
       <pose>0.046541 24.3247 -0 0 -0 0</pose>
     </model>
-    <model name='Construction Cone_2_clone_2'>
-      <link name='link'>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <scale>10 10 10</scale>
-              <uri>model://construction_cone/meshes/construction_cone.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <scale>10 10 10</scale>
-              <uri>model://construction_cone/meshes/construction_cone.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <self_collide>0</self_collide>
-        <inertial>
-          <pose>0 0 0 0 -0 0</pose>
-          <inertia>
-            <ixx>1</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>1</iyy>
-            <iyz>0</iyz>
-            <izz>1</izz>
-          </inertia>
-          <mass>1</mass>
-        </inertial>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <pose>2.0237 7.99878 -0 0 -1e-06 0</pose>
-    </model>
     <model name='Stop Sign_clone'>
       <static>1</static>
       <link name='link'>
@@ -677,49 +608,6 @@
         <kinematic>0</kinematic>
       </link>
       <pose>0.965387 18.8724 -0.00011 0 -0 0</pose>
-    </model>
-    <model name='Stop Sign_clone_clone'>
-      <static>1</static>
-      <link name='link'>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://stop_sign/meshes/stop_sign.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://stop_sign/meshes/stop_sign.dae</uri>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://stop_sign/materials/scripts</uri>
-              <uri>model://stop_sign/materials/textures</uri>
-              <name>StopSign/Diffuse</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <pose>0.902161 27.899 -0.00011 0 -0 0</pose>
     </model>
     <model name='Stop Sign_clone_0'>
       <static>1</static>
