@@ -72,7 +72,7 @@ class Controller {
             //std::cout << angleSpeed; 
 
             // Compute target speed
-            targetSpeed = Kp*error + Ki*errorSum + Kd*errorDiff+angleSpeed*FF;
+            targetSpeed = Kp*error + Kd*errorDiff+angleSpeed*FF;
 
             //ROS_INFO_STREAM("Error is " << error << "ErrorSum is " << errorSum << " | ErrorDiff is " << errorDiff << " | desiredSpeed is " << desiredSpeed << " | targetSpeed is " << targetSpeed);
 
