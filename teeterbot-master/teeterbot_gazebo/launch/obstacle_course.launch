@@ -1,15 +1,20 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="control" default="false" />
-  <arg name="use_rqt" default="true" />
+  <arg name="controller" default="1" /><!-- 0=no controller || 1=PID || 2=PD || 3=PDFF || 4=PDFF statespace || 5 = computed torque-->
+  <arg name="use_rqt" default="false" />
+  <arg name="record_bag" default="true" />
+  <arg name="numSpeedControllers" default="3" />
+ 
+  <arg name="use_torque" default="false" unless="$(eval controller>numSpeedControllers)"/>
+  <arg name="use_torque" value="true" if="$(eval controller>numSpeedControllers)" />
+  <arg name="use_speed" default="true" unless="$(eval controller>numSpeedControllers)"/>
+  <arg name="use_speed" value="false" if="$(eval controller>numSpeedControllers)" />
   <!-- World File -->
   <arg name="world_file" default="$(find teeterbot_gazebo)/world/obstacle_course.world"/>
-
   <!-- Start up Gazebo -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="world_name" value="$(arg world_file)"/>
   </include>
-
   <!-- Spawn Teeterbot with specific settings -->
   <include file="$(find teeterbot_gazebo)/launch/teeterbot_robot.launch" >
     <!-- Name and spawn pose -->
@@ -18,7 +23,6 @@
     <arg name="start_y" value="0.0" />
     <arg name="start_z" value="0.2" />
     <arg name="start_yaw" value="0.0" />
-
     <!-- Physical properties -->
     <arg name="body_length" value="0.8" />
     <arg name="body_width" value="0.3" />
@@ -27,34 +31,33 @@
     <arg name="wheel_mass" value="1.0" />
     <arg name="wheel_radius" value="0.2" />
     <arg name="training_wheels" value="false" />
-
     <!-- weighted block settings mass in kg-->
     <arg name="weighted_block_mass" value="20" />
     <arg name="weighted_block_height" value="0.25" />
-
     <!-- Simulation behavior settings -->
     <arg name="pub_ground_truth" value="false" />
     <arg name="auto_reset_orientation" value="true" />
     <arg name="auto_reset_delay" value="2.0" />
-
     <!-- Control mode (set only one) -->
     <arg name="voltage_mode" value="false" />
-    <arg name="torque_mode" value="true" />
-    <arg name="speed_mode" value="false" />
+    <arg name="torque_mode" value="$(arg use_torque)" />
+    <arg name="speed_mode" value="$(arg use_speed)" />
   </include>
-  
-  <!-- Node for QuatToEuler Utility-->
+   <!-- Node for QuatToEuler Utility-->
   <node pkg="utilities" name="gazebo_rpy" type="QuatToEuler" output="screen"/>
    
   <!-- Node for rosbag -->
-  <node pkg="rosbag" type="record" args="record -o $(find bags)/bag_files/ /teeterbot/rpy" name="rosbag_recorder" output="screen"/>
-
-  <group if="$(eval use_rqt)">
+  <group if="$(eval record_bag)">
+     <node pkg="rosbag" type="record" args="record -o $(find bags)/bag_files/ /teeterbot/rpy" name="rosbag_recorder" output="screen"/>
+  </group>
+  <!-- launch rqt viewer nodes -->
+  <group if="$(arg use_rqt)">
      <include file="$(find teeterbot_gazebo)/launch/rqt.launch" />
   </group>
-
-  <group if="$(eval control)">
-     <include file="$(find teeterbot_gazebo)/launch/control.launch" />
+  <!-- what controller to launch -->
+  <group if="$(eval controller > 0)">
+    <include file="$(find teeterbot_gazebo)/launch/controller.launch" >
+      <arg name="controller_type" value="$(arg controller)" />
+    </include>
   </group>
-
 </launch>
